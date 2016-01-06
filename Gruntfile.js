@@ -3,13 +3,13 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
-      // options: {
-      //   separator: ';',
-      // },
-      // dist: {
-      //   src: ['2015-11-shortly-deploy/*.js'],
-      //   dest: 'distribution/built.js',
-      // },
+      options: {
+        separator: ';',
+      },
+      dist: {
+        src: ['server.js', 'server-config.js', 'app/**/*.js', 'lib/**/*.js','public/**/*.js' ],
+        dest: 'public/dist/built.js',
+      },
     },
 
     mochaTest: {
@@ -28,6 +28,9 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+
+
+
     },
 
     jshint: {
@@ -51,8 +54,7 @@ module.exports = function(grunt) {
     watch: {
       scripts: {
         files: [
-          'public/client/**/*.js',
-          'public/lib/**/*.js',
+          'public/dist/**/*.js'
         ],
         tasks: [
           'concat',
@@ -71,6 +73,16 @@ module.exports = function(grunt) {
       },
       dist: {
         src: ['server.js', 'server-config.js', 'app/**/*.js', 'lib/**/*.js','public/**/*.js' ],
+        dest: 'public/dist/concat-built.js',
+      },
+    },
+
+    uglify: {
+      options: {
+        separator: ';',
+      },
+      dist: {
+        src: ['public/dist/concat-built.js' ],
         dest: 'public/dist/built.js',
       },
     },
@@ -102,6 +114,8 @@ module.exports = function(grunt) {
 
     grunt.task.run([ 'watch' ]);
     grunt.task.run([ 'concat' ]);
+    grunt.task.run([ 'uglify' ]);
+
   });
 
   ////////////////////////////////////////////////////
@@ -124,9 +138,8 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('deploy', [
+  grunt.registerTask('deploy', ['concat', 'uglify'] );
       // add your production server task here
-  ]);
 
 
 };
