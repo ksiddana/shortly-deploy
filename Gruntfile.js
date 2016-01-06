@@ -3,6 +3,13 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+      // options: {
+      //   separator: ';',
+      // },
+      // dist: {
+      //   src: ['2015-11-shortly-deploy/*.js'],
+      //   dest: 'distribution/built.js',
+      // },
     },
 
     mochaTest: {
@@ -58,6 +65,16 @@ module.exports = function(grunt) {
       }
     },
 
+    concat: {
+      options: {
+        separator: ';',
+      },
+      dist: {
+        src: ['server.js', 'server-config.js', 'app/**/*.js', 'lib/**/*.js','public/**/*.js' ],
+        dest: 'public/dist/built.js',
+      },
+    },
+
     shell: {
       prodServer: {
       }
@@ -84,6 +101,7 @@ module.exports = function(grunt) {
     nodemon.stderr.pipe(process.stderr);
 
     grunt.task.run([ 'watch' ]);
+    grunt.task.run([ 'concat' ]);
   });
 
   ////////////////////////////////////////////////////
@@ -100,6 +118,7 @@ module.exports = function(grunt) {
   grunt.registerTask('upload', function(n) {
     if(grunt.option('prod')) {
       // add your production server task here
+
     } else {
       grunt.task.run([ 'server-dev' ]);
     }
